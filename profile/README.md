@@ -1,4 +1,4 @@
-<img src="https://github.com/mattiasvillani/mattiasvillani/raw/main/GreyBrain.jpg" alt="brain image">
+<img src="https://github.com/StatisticsSU/StatisticsSU/raw/main/images/albanomontage.jpg" alt="albano image">
 
 ### Welcome!
 
