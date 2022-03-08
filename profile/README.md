@@ -1,4 +1,4 @@
-<img src="https://github.com/StatisticsSU/StatisticsSU/raw/main/images/albanomontage.jpg" alt="albano image">
+<img src="https://github.com/StatisticsSU/.github/raw/main/images/albanomontage.jpg" alt="albano image">
 
 ### Welcome!
 
