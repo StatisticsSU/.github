@@ -1,0 +1,704 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Making R packages</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="85371606-32d8-4d1c-9683-3088ffad99d2" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📦</span></div><h1 class="page-title">Making R packages</h1></header><div class="page-body"><nav id="f5682857-2336-42e9-ad96-e0c6cb80fc96" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#eb03f007-e787-4cb4-a4a9-8e9a30e97da1">0. Install <strong>package creator and documentation tools</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#726f0c67-3705-4b72-b39f-20d6c4e1f895">1. Create a package</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#6372dfd1-11fc-435e-ad42-42263be440bc">2. Adding files to the package</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#6fad646e-8cb3-42b5-860c-44cbe325e030">3. Documenting packages</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d46eed7c-c8e7-455d-8d83-a0ad4c932e99">4. Making the package available to others</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f0bbf827-c833-47c9-bb1d-f7f55f89b286">5. Creating a Github repository for the package</a></div></nav><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="133a0274-6f1e-4110-bc70-c46635f9489c"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">This page is based on the blog: <a href="https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html">https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html</a></div></figure><h2 id="eb03f007-e787-4cb4-a4a9-8e9a30e97da1" class="">0. Install <strong>package creator and documentation tools</strong></h2><pre id="b5eea211-34c7-409d-82da-d96e8995fc94" class="code"><code>install.packages(&quot;devtools&quot;)
+install.packages(&quot;roxygen2&quot;)</code></pre><h2 id="726f0c67-3705-4b72-b39f-20d6c4e1f895" class="">1. Create a package</h2><ul id="840544c0-f621-48fd-8624-0fc483db5d84" class="bulleted-list"><li style="list-style-type:disc">A package name <code>regkurs</code> is the <strong>created</strong> with the command</li></ul><pre id="e31b29b4-3319-4148-a487-de0c7091dd0f" class="code"><code>devtools::create(&quot;regkurs&quot;)</code></pre><ul id="44cf4497-6117-4cf0-b447-66a3fd576273" class="bulleted-list"><li style="list-style-type:disc">The create command sets up a <strong>folder structure</strong> for the package:<ul id="4ea205ef-861d-4271-b193-c34d02af7928" class="bulleted-list"><li style="list-style-type:circle"><strong>DESCRIPTION</strong>: This is where all the meta-data about your package goes.</li></ul><ul id="0e036e21-7a77-429e-9350-f225439ae18c" class="bulleted-list"><li style="list-style-type:circle"><strong>regkurs.Rproj</strong>: This is a RStudio specific file that treats the package as project in RStudio. Can be convenient. Just click on the file in your file explorer and the whole project for the package will be loaded in Rstudio.</li></ul><ul id="83d1cd61-a9ce-4259-b2c6-629719cd2fc8" class="bulleted-list"><li style="list-style-type:circle"><strong>R</strong>: This is where all your R code goes for your package. Your source files (.R) with all the functions in the package should be placed here.</li></ul><ul id="2d4dc2dc-a6b6-4d46-bff5-0f9dc20c8abb" class="bulleted-list"><li style="list-style-type:circle">the <strong>man</strong> folder will contain the documentation, when that is created. This folder will not be available at this stage. See below on creating documentation. </li></ul><ul id="50ad0974-a53f-41bc-8264-70935c1dcc56" class="bulleted-list"><li style="list-style-type:circle">the <strong>vignette</strong> folder with the tutorials for the package, if and when such are created.</li></ul><ul id="2299e9c0-839b-4eff-8f35-76dd71c8e2fe" class="bulleted-list"><li style="list-style-type:circle">the <strong>data</strong> folder will contain the datasets included in the package, when datasets have been added. This folder will not be available at this stage. See below on adding data.</li></ul></li></ul><h2 id="6372dfd1-11fc-435e-ad42-42263be440bc" class="">2. Adding files to the package</h2><ul id="e238506c-6fe1-4dd4-aaa8-9ac255b74af9" class="bulleted-list"><li style="list-style-type:disc">Add source files (.R) to the /R folder. Set the working directory using for example <code>setwd()</code> to the folder of the generated package. The following command will build the package and install it on your local machine in the R system library:<pre id="dab2d5c8-7f49-4019-b3fb-7e56fadc6bf4" class="code"><code>devtools::install()</code></pre><ul id="9d080ecc-b2e4-4b8b-9137-8adbf7af413a" class="bulleted-list"><li style="list-style-type:circle">The <strong>basic workflow</strong> after a package has been initialized:</li></ul><ul id="9bf8e371-dd93-4903-8d88-68605e476a27" class="bulleted-list"><li style="list-style-type:circle"><code>devtools::document()</code> builds the documentation files on your local machine.</li></ul><ul id="45d93199-e2e0-4f32-bef4-810f90f9eb17" class="bulleted-list"><li style="list-style-type:circle"><code>devtools::install()</code> </li></ul></li></ul><ul id="610abc1b-56fe-414d-878d-2f2378aad352" class="bulleted-list"><li style="list-style-type:disc"><strong>Including datasets in the package</strong>. Doing  <code>devtools::use_data(mydata)</code> makes the dataset in <code>mydata</code> available in the package as the file <code>/data/mydata.rda</code>
+UPDATE: I had to do the following for this to work (on Linux at least):<pre id="977086a0-f9d2-4971-a6d3-6da2fdca763c" class="code"><code>library(devtools)
+use_data(mydata)</code></pre></li></ul><ul id="51f9f363-c44a-483d-91de-3a54710c3986" class="bulleted-list"><li style="list-style-type:disc"><strong>Using other packages in your package. </strong><em>Never use library()</em> in your package. Instead to this:<ul id="71bb630a-01bf-4965-9e34-442afc87f16e" class="bulleted-list"><li style="list-style-type:circle">Add the following in your DESCRIPTION file (tells the package that it depends on these two packages. In the example below, the first package needs to be version 1.9.4 or higher, the other the most recent version):</li></ul><pre id="5d3bcb11-4684-4b80-9f4f-e7fa5dc08a92" class="code"><code>Imports:
+	data.table (&gt;= 1.9.4),
+	dplyr</code></pre><ul id="f159546a-2f2d-4d29-9b83-80a3a1e8549b" class="bulleted-list"><li style="list-style-type:circle">use the double-colon <code>::</code> when using functions from other packages from within your package. For example <code>dplyr::filter()</code> to use the <code>filter</code> function from the <code>dplyr</code> package.</li></ul></li></ul><h2 id="6fad646e-8cb3-42b5-860c-44cbe325e030" class="">3. Documenting packages</h2><p id="42938210-0587-4219-8bd9-5638fe903ff8" class="">Functions and datasets in the package can be documented so that users can get help within R with the usual <code>?</code> . </p><ul id="056fe25b-66e1-4802-b4e2-6b99bc9ec449" class="bulleted-list"><li style="list-style-type:disc">The documentation of a function should be placed right above the function definition for the system to find it when building the docs. Here is an example: </li></ul><pre id="dc4993bd-698f-47f0-8dbf-003e2ad3d9cf" class="code"><code>#&#x27; Summarize the results from a logistic regression analysis
+#&#x27;
+#&#x27; Alternative to `summary.glm` to summarize a regression from `glm`.
+#&#x27; Prints a table similar to the one generated by SAS and Minitab.
+#&#x27; @param glmobject a fitted regression model from `glm`.
+#&#x27; @param param `TRUE` if parameter estimates, standard errors etc is computed.
+#&#x27; @param conf_intervals `TRUE` if confidence intervals for parameters.
+#&#x27; @param vif_factors `TRUE` if variance inflation factors are to be printed.
+#&#x27; @return list with two tables: param, odds_ratio
+#&#x27; @export
+#&#x27; @examples
+#&#x27; library(regkurs)
+#&#x27; glmfit &lt;- glm(survived ~ age + sex + firstclass, data = titanic, family = binomial)
+#&#x27; logisticregsummary(glmfit)</code></pre><figure id="907c8081-a06a-470f-9ba7-60aa9ba571a3" class="image"><a href="Making%20R%20p%20907c8/logisticregsummary.png"><img style="width:1914px" src="Making%20R%20p%20907c8/logisticregsummary.png"/></a></figure><p id="4bbc8761-f4b6-4629-817e-ec7c271b60e2" class="">The <code>@export</code> makes sure that this function is included in the docs.</p><ul id="338b54ce-5cd3-4739-beef-0f04508abe17" class="bulleted-list"><li style="list-style-type:disc">To <strong>build the documentation</strong>, use the command</li></ul><pre id="87eaa2f8-8ed1-4392-a213-d1523b2cebff" class="code"><code>devtools::document()</code></pre><ul id="9d5b167e-462d-47ff-ab2d-6024c1dc32de" class="bulleted-list"><li style="list-style-type:disc"><strong>Math in documentation</strong>. The equation <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>β</mi><mi>k</mi></msub><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">y = \beta_0 + \beta_1x_1+\ldots,\beta_k x_k+\varepsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">ε</span></span></span></span></span><span>﻿</span></span> can be included in the documentation as ‘display equation’ (use <code>\eqn{}</code>  for inline equations):</li></ul><pre id="0c40184d-ff56-4cc9-9c56-fb8cad3748db" class="code"><code>\deqn{y = \beta_1 x_1 + \ldots + \beta_k x_k + \epsilon}{y = \beta_1 *x_1 + .... + \beta_k x_k + \epsilon}</code></pre><p id="0585117d-6a05-4ca8-ba7f-284055bd4766" class="">Note that the maths is written twice:</p><ul id="420602cb-0925-45dc-ae0f-cb23441283d2" class="bulleted-list"><li style="list-style-type:disc">first in a latex version which prints well in the pdf</li></ul><ul id="52081da8-cb3e-40bc-94d7-2e5c7170fe9c" class="bulleted-list"><li style="list-style-type:disc">then in a ascii version which prints well inside R</li></ul><p id="69ffcf28-3a63-4ab4-a09e-687e099669ed" class="">The general syntax for maths in the docs is hence  <code>\deqn{latex}{ascii}</code>. It is ok to just use <code>\deqn{ascii}</code>, but that will not give you latex in the pdf file of the docs.</p><ul id="9d87e718-30c7-4a37-9dd2-a9676771c741" class="bulleted-list"><li style="list-style-type:disc">A <strong>dataset </strong>can be <strong>documented</strong> by editing adding an entry in the files in <code>/R/datasets.R</code> (you have to create this file once for the package).  Here is an example:</li></ul><pre id="59571f48-0848-4a4d-aa04-b75bde55267f" class="code"><code>#&#x27; Survival of passengers on the Titanic
+#&#x27;
+#&#x27; This data set provides information on the fate of passengers on the fatal maiden voyage of the ocean liner ‘Titanic’, summarized according to economic status (class), sex, age and survival. \cr \cr
+#&#x27; NOTE: this is not the same as the dataset Titanic (note capital T) which has more observations, but also missing values.
+#&#x27;
+#&#x27; The sinking of the Titanic is a famous event, and new books are still being published about it. Many well-known facts—from the proportions of first-class passengers to the ‘women and children first’ policy, and the fact that that policy was not entirely successful in saving the women and children in the third class—are reflected in the survival rates for various classes of passenger. \cr
+#&#x27; These data were originally collected by the British Board of Trade in their investigation of the sinking. Note that there is not complete agreement among primary sources as to the exact numbers on board, rescued, or lost. \cr
+#&#x27; Due in particular to the very successful film ‘Titanic’, the last years saw a rise in public interest in the Titanic. Very detailed data about the passengers is now available on the Internet, at sites such as Encyclopedia Titanica (https://www.encyclopedia-titanica.org/).
+#&#x27;
+#&#x27; @format A data frame with 887 rows and 8 variables:
+#&#x27; \describe{
+#&#x27;   \item{name}{passenger name}
+#&#x27;   \item{survived}{0 = no, 1 = yes}
+#&#x27;   \item{sex}{male/female}
+#&#x27;   \item{age}{age of passenger}
+#&#x27;   \item{fare}{ticket cost}
+#&#x27;   \item{firstclass}{first class ticket}
+#&#x27;   ...
+#&#x27; }
+#&#x27; @source Dawson, Robert J. MacG. (1995), The ‘Unusual Episode’ Data Revisited. Journal of Statistics Education, 3. doi: 10.1080/10691898.1995.11910499.
+&quot;titanic&quot;</code></pre><ul id="d0a40808-8289-4868-8f91-6421545bd691" class="bulleted-list"><li style="list-style-type:disc">The <strong>pdf of the manual </strong>can be build with (may not work on windows)</li></ul><pre id="441e30f7-48f7-44af-8f6f-71c9b2a9a5f7" class="code"><code>devtools::build_manual(path = &quot;./man&quot;) # Builds the pdf in the /man subfolder</code></pre><ul id="1f9a93e5-4025-419c-adfe-49960b5c5480" class="bulleted-list"><li style="list-style-type:disc"><strong>Vignettes</strong> give a nice tutorial style intro to your package:</li></ul><pre id="65fa25ce-6f46-4856-ad40-a081a65c38fc" class="code"><code>usethat::use_vignette(&quot;introduction&quot;)</code></pre><p id="253d9bde-541e-43c1-84a3-c798f36628d1" class="">This will create a <code>vignette/introduction.Rmd</code> file. This is a vignette template Rmarkdown file that you can then use to fill out steps on how you can use your package.</p><h2 id="d46eed7c-c8e7-455d-8d83-a0ad4c932e99" class="">4. Making the package available to others</h2><ul id="7eaf7401-ee52-48e4-a2f9-5ed26222197d" class="bulleted-list"><li style="list-style-type:disc">If you have a mature package, you can <a href="https://r-pkgs.org/release.html">register it on CRAN</a>.</li></ul><ul id="6bbd7a15-dc7f-43a0-8bbb-cacb4a49de9d" class="bulleted-list"><li style="list-style-type:disc">An easier way to distribute your package is to host it on <a href="https://github.com/">GitHub</a>. See Point 5 below for info.</li></ul><ul id="69f82678-94d6-4f08-96d7-0f5b20fa5527" class="bulleted-list"><li style="list-style-type:disc"><strong>Users can install the package</strong> with the commands:</li></ul><pre id="14e1615b-922d-4490-a1c7-eae6141a2b2a" class="code"><code>install.packages(&quot;remotes&quot;) # install only once to get the install_git() function
+library(remotes)
+install_git(&quot;mattiasvillani/regkurs&quot;) # The repository regkurs on my github &#x27;mattiasvillani&#x27;
+library(regkurs)</code></pre><ul id="60793647-e64b-4814-9e96-d5a29b26c1dc" class="bulleted-list"><li style="list-style-type:disc">Here is the regkurs package on github: <a href="https://github.com/mattiasvillani/regkurs">https://github.com/mattiasvillani/regkurs</a></li></ul><figure id="865e7e3c-9a0d-4b7a-bbcb-8af8ff471c26" class="image"><a href="Making%20R%20p%20907c8/githubregkurs.png"><img style="width:1391px" src="Making%20R%20p%20907c8/githubregkurs.png"/></a></figure><h2 id="f0bbf827-c833-47c9-bb1d-f7f55f89b286" class="">5. Creating a Github repository for the package</h2><ul id="2c098a8b-a319-4f58-982c-1e2f13fda3e3" class="bulleted-list"><li style="list-style-type:disc"><strong>Make a github account</strong>. It free for unlimited public repositories. But even private repositories are free if you are an academic: <a href="https://docs.github.com/en/education/explore-the-benefits-of-teaching-and-learning-with-github-education/use-github-in-your-classroom-and-research/apply-for-an-educator-or-researcher-discount">https://docs.github.com/en/education/explore-the-benefits-of-teaching-and-learning-with-github-education/use-github-in-your-classroom-and-research/apply-for-an-educator-or-researcher-discount</a></li></ul><ul id="7254237d-f2cc-4242-aff6-8171fea4abb8" class="bulleted-list"><li style="list-style-type:disc">Click the ‘New repository’ button on the top left:</li></ul><figure id="1e45f1fa-1186-4bfd-a238-2e7dfa1017b9" class="image"><a href="Making%20R%20p%20907c8/newrepo.png"><img style="width:1278px" src="Making%20R%20p%20907c8/newrepo.png"/></a></figure><ul id="355589a3-a180-483b-a3d7-2a2740bb13e1" class="bulleted-list"><li style="list-style-type:disc">Fill in the info about the repo. Don’t click the last three boxes if you are importing an existing repository (which is often what you will do).
+</li></ul><figure id="8c3bc126-db65-4254-a10e-4b90fb6df032" class="image"><a href="Making%20R%20p%20907c8/repoinit.png"><img style="width:962px" src="Making%20R%20p%20907c8/repoinit.png"/></a></figure><ul id="b34e83cb-56c0-409a-895c-ffec98078338" class="bulleted-list"><li style="list-style-type:disc">The above creates an empty repository at Github. Now it is time to make Git repository on your local computer. In the terminal: go to the directory of your R package and type this code in the terminal (assuming your repo is called <code>myprettypackage</code>)</li></ul><pre id="26acff2b-ab24-43f4-a3ec-bb5043488c3f" class="code"><code>echo &quot;# myprettypackage&quot; &gt;&gt; README.md
+git init
+git add README.md
+git commit -m &quot;first commit&quot;
+git branch -M main</code></pre><p id="576da5b7-e4f0-4020-9489-6c5043996bc8" class="">You now have a local git repository on your computer (given by the hidden .git folder in your R package directory)!</p><ul id="fb979953-e023-4449-967e-860d86e04b43" class="bulleted-list"><li style="list-style-type:disc">The final step is to connect your local repository to the one on Github:</li></ul><pre id="fc4bed69-96b9-4e17-86ae-9f2811c4c3b8" class="code"><code>git remote add origin git@github.com:StatisticsSU/myprettypackage.git</code></pre><ul id="e0e4e291-4918-4efe-81da-7a8b5c403adf" class="bulleted-list"><li style="list-style-type:disc">You can now <strong>push</strong> the files in your local repo to the Github repo.</li></ul><pre id="e9c51bfe-da3f-4b20-b59a-ca3dc55f1eae" class="code"><code>git push -u origin main</code></pre><ul id="7087cacb-59da-4111-acf8-9696ec1540fc" class="bulleted-list"><li style="list-style-type:disc">Or you can <strong>push directly from RStudio</strong></li></ul><figure id="fe4c6a2f-b7d4-4f56-83cc-e5ead49b8887" class="image"><a href="Making%20R%20p%20907c8/rstudiogit.png"><img style="width:1076px" src="Making%20R%20p%20907c8/rstudiogit.png"/></a></figure><ul id="08a59b44-e675-4b3c-9a66-a92747103034" class="bulleted-list"><li style="list-style-type:disc">You can <strong>pull</strong> someone elses changes in your <code>myprettypackage</code>  on Github to your local git repository.</li></ul><p id="77a26918-d2b6-455e-a71f-76977a1fe959" class="">
+</p></div></article></body></html>
